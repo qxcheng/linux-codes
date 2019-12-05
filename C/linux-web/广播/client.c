@@ -1,0 +1,68 @@
+#include <stdio.h>
+#include <sys/types.h>
+#include <sys/socket.h>
+#include <netinet/in.h>
+#include <arpa/inet.h>
+#include <netdb.h>
+#include <string.h>
+#include <unistd.h>
+#include <stdlib.h>
+#include <sys/wait.h>
+#include <sys/stat.h>
+#include <errno.h>
+
+#define RET_OK 0
+#define RET_ERR -1
+#define LISTEN_QUEUE_NUM 5
+#define BUFFER_SIZE 256
+#define ECHO_PORT 2029
+
+int main(int argc, char **argv)
+{
+	int ret = RET_OK;
+	int sockfd, opt = 1;
+	uint32_t len;
+	uint8_t buffer[BUFFER_SIZE];
+	struct sockaddr_in cliaddr;
+	
+	
+	if((sockfd = socket(AF_INET, SOCK_DGRAM, 0)) < 0)
+	{
+		perror("ERROR opening socket");
+		return RET_ERR;
+	}
+	
+	if((ret = setsockopt(sockfd, SOL_SOCKET, SO_REUSEADDR, &opt, sizeof(opt))) < 0)
+	{
+		perror("ERROR setsockopt");
+		goto failed;
+	}
+	
+	memset(&cliaddr, 0, sizeof(cliaddr));
+	cliaddr.sin_family = AF_INET;
+	cliaddr.sin_addr.s_addr = INADDR_ANY; //监听所有IP地址
+	cliaddr.sin_port = htons(ECHO_PORT);  //监听2029
+	
+	if ((ret = bind(sockfd, (struct sockaddr *) &cliaddr, sizeof(cliaddr))) < 0)
+	{
+		perror("ERROR on binding");
+		goto failed;
+	}
+	
+	do
+	{
+		len = sizeof(cliaddr);
+		if((ret = recvfrom(sockfd, buffer, sizeof(buffer), 0, (struct
+		sockaddr *)&cliaddr, &len)) > 0)
+		{
+			printf("Recv from %s\r\n", inet_ntoa(cliaddr.sin_addr));
+			ret = sendto(sockfd, buffer, ret, 0, (struct sockaddr
+			*)&cliaddr, len);
+		}
+	}while(ret >= 0);
+	
+failed:
+	close(sockfd);
+	
+	return 0;
+}

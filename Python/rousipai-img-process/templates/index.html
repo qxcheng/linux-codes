@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>肉撕派图像处理演示界面</title>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+    integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <style>
+        .img1{
+        border:solid 1px black;
+        }
+    </style>
+</head>
+
+<body>
+  {% block head %}
+  <div class="container mt-3">
+    <p>
+      <div align="center">
+        <img src="{{ url_for('static', filename='./images/tic.gif', _t=val1) }}" alt="你的图片被外星人劫持了～～" />
+      </div>
+      <h1 class="text-center">肉撕派图像处理演示界面</h1>
+    </p>
+    <div class="alert alert-info" role="alert">
+      <h5 class="alert-heading"><strong>提示</strong></h5>
+      <hr>
+      <ul>
+        <li>目前服务尚处于测试阶段，请谨慎使用，并严格按照规则操作</li>
+        <li>请先选择并上传文件，然后点击相应按钮进行操作</li>
+        <li>本产品新增了添加logo和主色提取的功能，敬请使用</li>
+        <li>推荐使用Chrome或Firefox浏览器</li>
+      </ul>
+    </div>
+    {% endblock %}
+
+    {% block main %}
+    <div class="input-group mb-3">
+      <div class="input-group-prepend2">
+        <table>
+          <tr>
+            <td>
+              <h5><strong>1.图片处理</strong></h5>
+              <form action="http://localhost:5000/process" method="POST" enctype="multipart/form-data">
+                原图：<input type="file" name="file" />
+                边距：<input type="text" name="min_margin" />
+                宽度：<input type="text" name="width_obj" />
+                高度：<input type="text" name="height_obj" />
+                <input type="submit" value="处理图片" />
+              </form>
+            </td>
+          </tr>
+
+          <tr>
+            <td>
+              <h5><strong>2.添加logo</strong></h5>
+              <form action="http://localhost:5000/logo" method="POST" enctype="multipart/form-data">
+                原图：<input type="file" name="file" />
+                logo：<input type="file" name="logofile" />
+                <input type="submit" value="添加logo" />
+              </form>
+            </td>
+          <tr>
+
+          <tr>
+            <td>
+              <h5><strong>3.主色提取</strong></h5>
+              <form action="http://localhost:5000/color" method="POST" enctype="multipart/form-data">
+                原图：<input type="file" name="file" />
+                <input type="submit" value="主色提取" />
+              </form>
+            </td>
+          </tr>
+        </table>
+      </div>
+    </div>
+  </div>
+  {% endblock %}
+
+  {% block footer %}
+  <div class="container mb-4">
+    <div class="input-group-prepend3">
+      <div id="footer">
+        <h4>图片展示区</h4>
+
+        <img src="{{ url_for('static', filename='./images/%s' % src_name, _t=val1) }}" alt="你的图片被外星人劫持了～～" />
+
+        <img src="{{ url_for('static', filename='./images/%s' % dst_name, _t=val1) }}" alt="你的图片被外星人劫持了～～" />
+
+      </div>
+    </div>
+  </div>
+  {% endblock %}
+
+</body>
+
+</html>
