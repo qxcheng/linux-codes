@@ -67,7 +67,7 @@ def adaBoostTrainDS(dataArr,classLabels,numIt=40):
             break
     return weakClassArr #返回弱分类器字典的列表
 
-#classify
+#cv-classify-transfer
 def adaClassify(datToClass,classifierArr):
     dataMatrix = np.mat(datToClass)
     m = np.shape(dataMatrix)[0]

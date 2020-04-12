@@ -456,7 +456,7 @@ for epoch in range(n_epochs):
 
         optimizer_D.zero_grad()
 
-        # Measure discriminator's ability to classify real from generated samples
+        # Measure discriminator's ability to cv-classify-transfer real from generated samples
         if wass_metric:
             # Gradient penalty term
             grad_penalty = calc_gradient_penalty(discriminator, real_imgs, gen_imgs)

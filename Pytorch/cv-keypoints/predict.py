@@ -21,7 +21,7 @@ def get_prediction(img_path, threshold):
     pred_boxes = pred_boxes[:pred_t+1]
     #print(pred_boxes)
 
-    pred_keypoints = list(pred[0]['keypoints'].detach().numpy())[:pred_t+1]
+    pred_keypoints = list(pred[0]['cv-keypoints'].detach().numpy())[:pred_t+1]
 
     return pred_boxes, pred_keypoints
 

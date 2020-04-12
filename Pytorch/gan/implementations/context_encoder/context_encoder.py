@@ -160,7 +160,7 @@ for epoch in range(opt.n_epochs):
 
         optimizer_D.zero_grad()
 
-        # Measure discriminator's ability to classify real from generated samples
+        # Measure discriminator's ability to cv-classify-transfer real from generated samples
         real_loss = adversarial_loss(discriminator(masked_parts), valid)
         fake_loss = adversarial_loss(discriminator(gen_parts.detach()), fake)
         d_loss = 0.5 * (real_loss + fake_loss)

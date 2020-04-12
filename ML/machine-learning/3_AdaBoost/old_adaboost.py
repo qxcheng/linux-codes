@@ -14,7 +14,7 @@ def loadDataSet(fileName):
         labelMat.append(float(lineArr[2]))
     return dataMat,labelMat
 
-def stumpClassify(dataMatrix,dimen,threshVal,threshIneq):#just classify the data
+def stumpClassify(dataMatrix,dimen,threshVal,threshIneq):#just cv-classify-transfer the data
     retArray = ones((shape(dataMatrix)[0],1))
     if threshIneq == 'lt':
         retArray[dataMatrix[:,dimen] <= threshVal] = -1.0
@@ -34,7 +34,7 @@ def buildStump(dataArr,classLabels,D):
         for j in range(-1,int(numSteps)+1):#loop over all range in current dimension
             for inequal in ['lt', 'gt']: #go over less than and greater than
                 threshVal = (rangeMin + float(j) * stepSize)
-                predictedVals = stumpClassify(dataMatrix,i,threshVal,inequal)#call stump classify with i, j, lessThan
+                predictedVals = stumpClassify(dataMatrix,i,threshVal,inequal)#call stump cv-classify-transfer with i, j, lessThan
                 errArr = mat(ones((m,1)))
                 errArr[predictedVals == labelMat] = 0
                 print "predictedVals",predictedVals.T,"errArr",errArr.T

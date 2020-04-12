@@ -37,10 +37,10 @@ class RandomHorizontalFlip(object):
             target["boxes"] = bbox
             if "masks" in target:
                 target["masks"] = target["masks"].flip(-1)
-            if "keypoints" in target:
-                keypoints = target["keypoints"]
+            if "cv-keypoints" in target:
+                keypoints = target["cv-keypoints"]
                 keypoints = _flip_coco_person_keypoints(keypoints, width)
-                target["keypoints"] = keypoints
+                target["cv-keypoints"] = keypoints
         return image, target
 
 

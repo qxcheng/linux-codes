@@ -72,8 +72,8 @@ class ConvertCocoPolysToMask(object):
         masks = convert_coco_poly_to_mask(segmentations, h, w)
 
         keypoints = None
-        if anno and "keypoints" in anno[0]:
-            keypoints = [obj["keypoints"] for obj in anno]
+        if anno and "cv-keypoints" in anno[0]:
+            keypoints = [obj["cv-keypoints"] for obj in anno]
             keypoints = torch.as_tensor(keypoints, dtype=torch.float32)
             num_keypoints = keypoints.shape[0]
             if num_keypoints:
@@ -92,7 +92,7 @@ class ConvertCocoPolysToMask(object):
         target["masks"] = masks
         target["image_id"] = image_id
         if keypoints is not None:
-            target["keypoints"] = keypoints
+            target["cv-keypoints"] = keypoints
 
         # for conversion to coco api
         area = torch.tensor([obj["area"] for obj in anno])
@@ -108,7 +108,7 @@ def _coco_remove_images_without_annotations(dataset, cat_list=None):
         return all(any(o <= 1 for o in obj["bbox"][2:]) for obj in anno)
 
     def _count_visible_keypoints(anno):
-        return sum(sum(1 for v in ann["keypoints"][2::3] if v > 0) for ann in anno)
+        return sum(sum(1 for v in ann["cv-keypoints"][2::3] if v > 0) for ann in anno)
 
     min_keypoints_per_image = 10
 
@@ -119,9 +119,9 @@ def _coco_remove_images_without_annotations(dataset, cat_list=None):
         # if all boxes have close to zero area, there is no annotation
         if _has_only_empty_bbox(anno):
             return False
-        # keypoints task have a slight different critera for considering
+        # cv-keypoints task have a slight different critera for considering
         # if an annotation is valid
-        if "keypoints" not in anno[0]:
+        if "cv-keypoints" not in anno[0]:
             return True
         # for keypoint detection tasks, only consider valid images those
         # containing at least min_keypoints_per_image
@@ -168,8 +168,8 @@ def convert_to_coco_api(ds):
             masks = targets['masks']
             # make masks Fortran contiguous for coco_mask
             masks = masks.permute(0, 2, 1).contiguous().permute(0, 2, 1)
-        if 'keypoints' in targets:
-            keypoints = targets['keypoints']
+        if 'cv-keypoints' in targets:
+            keypoints = targets['cv-keypoints']
             keypoints = keypoints.reshape(keypoints.shape[0], -1).tolist()
         num_objs = len(bboxes)
         for i in range(num_objs):
@@ -183,8 +183,8 @@ def convert_to_coco_api(ds):
             ann['id'] = ann_id
             if 'masks' in targets:
                 ann["segmentation"] = coco_mask.encode(masks[i].numpy())
-            if 'keypoints' in targets:
-                ann['keypoints'] = keypoints[i]
+            if 'cv-keypoints' in targets:
+                ann['cv-keypoints'] = keypoints[i]
                 ann['num_keypoints'] = sum(k != 0 for k in keypoints[i][2::3])
             dataset['annotations'].append(ann)
             ann_id += 1

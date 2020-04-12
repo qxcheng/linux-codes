@@ -64,7 +64,7 @@ class CocoEvaluator(object):
             return self.prepare_for_coco_detection(predictions)
         elif iou_type == "segm":
             return self.prepare_for_coco_segmentation(predictions)
-        elif iou_type == "keypoints":
+        elif iou_type == "cv-keypoints":
             return self.prepare_for_coco_keypoint(predictions)
         else:
             raise ValueError("Unknown iou type {}".format(iou_type))
@@ -138,7 +138,7 @@ class CocoEvaluator(object):
             boxes = convert_to_xywh(boxes).tolist()
             scores = prediction["scores"].tolist()
             labels = prediction["labels"].tolist()
-            keypoints = prediction["keypoints"]
+            keypoints = prediction["cv-keypoints"]
             keypoints = keypoints.flatten(start_dim=1).tolist()
 
             coco_results.extend(
@@ -146,7 +146,7 @@ class CocoEvaluator(object):
                     {
                         "image_id": original_id,
                         "category_id": labels[k],
-                        'keypoints': keypoint,
+                        'cv-keypoints': keypoint,
                         "score": scores[k],
                     }
                     for k, keypoint in enumerate(keypoints)
@@ -280,10 +280,10 @@ def loadRes(self, resFile):
                 ann['bbox'] = maskUtils.toBbox(ann['segmentation'])
             ann['id'] = id + 1
             ann['iscrowd'] = 0
-    elif 'keypoints' in anns[0]:
+    elif 'cv-keypoints' in anns[0]:
         res.dataset['categories'] = copy.deepcopy(self.dataset['categories'])
         for id, ann in enumerate(anns):
-            s = ann['keypoints']
+            s = ann['cv-keypoints']
             x = s[0::3]
             y = s[1::3]
             x1, x2, y1, y2 = np.min(x), np.max(x), np.min(y), np.max(y)
@@ -322,7 +322,7 @@ def evaluate(self):
 
     if p.iouType == 'segm' or p.iouType == 'bbox':
         computeIoU = self.computeIoU
-    elif p.iouType == 'keypoints':
+    elif p.iouType == 'cv-keypoints':
         computeIoU = self.computeOks
     self.ious = {
         (imgId, catId): computeIoU(imgId, catId)

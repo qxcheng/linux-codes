@@ -193,7 +193,7 @@ for epoch in range(opt.n_epochs):
         # Sample noise as discriminator ground truth
         z = Variable(Tensor(np.random.normal(0, 1, (imgs.shape[0], opt.latent_dim))))
 
-        # Measure discriminator's ability to classify real from generated samples
+        # Measure discriminator's ability to cv-classify-transfer real from generated samples
         real_loss = adversarial_loss(discriminator(z), valid)
         fake_loss = adversarial_loss(discriminator(encoded_imgs.detach()), fake)
         d_loss = 0.5 * (real_loss + fake_loss)

@@ -61,7 +61,7 @@ def _get_iou_types(model):
     if isinstance(model_without_ddp, torchvision.models.detection.MaskRCNN):
         iou_types.append("segm")
     if isinstance(model_without_ddp, torchvision.models.detection.KeypointRCNN):
-        iou_types.append("keypoints")
+        iou_types.append("cv-keypoints")
     return iou_types
 
 

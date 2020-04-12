@@ -43,7 +43,7 @@ def testSpam():
         trainClasses.append(classList[docIndex])
     p0V,p1V,pSpam = bayes.trainNB0(np.array(trainMat),np.array(trainClasses))
     errorCount = 0
-    for docIndex in testSet:        #classify the remaining items
+    for docIndex in testSet:        #cv-classify-transfer the remaining items
         wordVector = bagOfWords2VecMN(vocabList, docList[docIndex])
         if bayes.classifyNB(np.array(wordVector),p0V,p1V,pSpam) != classList[docIndex]:
             errorCount += 1

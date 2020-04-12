@@ -58,7 +58,7 @@ supportVArray = np.zeros((1,featureNum),np.float32)
 resultArray = np.zeros((1,featureNum),np.float32)
 alphaArray[0,0] = alpha
 resultArray = -1*alphaArray*supportVArray
-# detect
+# cv-detect
 myDetect = np.zeros((3781),np.float32)
 for i in range(0,3780):
     myDetect[i] = resultArray[0,i]

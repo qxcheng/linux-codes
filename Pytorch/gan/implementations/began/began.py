@@ -171,7 +171,7 @@ for epoch in range(opt.n_epochs):
 
         optimizer_D.zero_grad()
 
-        # Measure discriminator's ability to classify real from generated samples
+        # Measure discriminator's ability to cv-classify-transfer real from generated samples
         d_real = discriminator(real_imgs)
         d_fake = discriminator(gen_imgs.detach())
 
