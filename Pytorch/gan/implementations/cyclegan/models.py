@@ -14,11 +14,7 @@ def weights_init_normal(m):
         torch.nn.init.constant_(m.bias.data, 0.0)
 
 
-##############################
-#           RESNET
-##############################
-
-
+# RESNET Gennerator
 class ResidualBlock(nn.Module):
     def __init__(self, in_features):
         super(ResidualBlock, self).__init__()
@@ -87,11 +83,7 @@ class GeneratorResNet(nn.Module):
         return self.model(x)
 
 
-##############################
-#        Discriminator
-##############################
-
-
+# Discriminator
 class Discriminator(nn.Module):
     def __init__(self, input_shape):
         super(Discriminator, self).__init__()
