@@ -3,16 +3,16 @@ import torch.nn as nn
 import torch.nn.functional as F 
 import torch.utils.data as Data
 import torchvision              
-from torch.autograd import Variable 
+from torch.autograd import Variable
 import matplotlib.pyplot as plt
-from tensorboardX import SummaryWriter
+#from tensorboardX import SummaryWriter
 
 def vgg_block(num_convs, in_channels, out_channels):
-    net = [nn.Conv2d(in_channels, out_channels, kernel_size=3, padding=1), nn.ReLU(True)] # 定义第一层
-    for i in range(num_convs-1):   # 定义后面的很多层
+    net = [nn.Conv2d(in_channels, out_channels, kernel_size=3, padding=1), nn.ReLU(True)]
+    for i in range(num_convs-1):
         net.append(nn.Conv2d(out_channels, out_channels, kernel_size=3, padding=1))
         net.append(nn.ReLU(True))
-    net.append(nn.MaxPool2d(2, 2)) # 定义池化层
+    net.append(nn.MaxPool2d(2, 2))
     return nn.Sequential(*net)
 
 class VGG16(nn.Module):
@@ -63,6 +63,6 @@ class VGG19(nn.Module):
 
 x = Variable(torch.randn(1,3,224,224)) #change 12 to the channel number of network input
 net =  VGG19()
-with SummaryWriter(comment='VGGNet') as w:
-    w.add_graph(net, (x,))
+# with SummaryWriter(comment='VGGNet') as w:
+#     w.add_graph(net, (x,))
 
