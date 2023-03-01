@@ -1,10 +1,8 @@
-- Chat
+- chat-system
 
-	An small chat projects.
+	An chat system.
 
-
-
-- StudentsManageSystem
+- students-manage-system
 
 	A student-manage system stands for teachers, students and administrator based on C.
 
